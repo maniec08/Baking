@@ -28,8 +28,8 @@ public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdap
     private final boolean twoPane;
 
     private void startFragment(int position) {
-       // Bundle arguments = new Bundle();
-       // arguments.putParcelable(KeyConstants.RECIPE, stepDetailsList.get(position));
+        Bundle arguments = new Bundle();
+        arguments.putParcelable(KeyConstants.RECIPE, stepDetailsList.get(position));
         if (twoPane) {
             ItemDetailFragment fragment = new ItemDetailFragment();
             //fragment.setArguments(arguments);
@@ -38,7 +38,7 @@ public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdap
                     .commit();
         } else {
             Intent intent = new Intent(parentActivity, ItemDetailActivity.class);
-          //  intent.putExtra(KeyConstants.RECIPE, arguments);
+            intent.putExtra(KeyConstants.RECIPE,  stepDetailsList.get(position));
             parentActivity.startActivity(intent);
         }
     }

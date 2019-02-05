@@ -10,7 +10,7 @@ public class Recipe {
 
     private static List<RecipeDetails> recipeDetailsList;
     private Context context;
-
+    public Recipe(){}
     public Recipe(Context context) {
         this.context = context;
     }

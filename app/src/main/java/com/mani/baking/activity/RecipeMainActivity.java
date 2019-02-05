@@ -59,16 +59,17 @@ public class RecipeMainActivity extends AppCompatActivity {
         recipeRecyclerView.setAdapter(recipeRecyclerAdapter);
     }
 
-    public class ParseJson extends AsyncTask<Void,Void, List<RecipeDetails>> {
+    private class ParseJson extends AsyncTask<Void,Void, List<RecipeDetails>> {
         Context context;
 
-        public ParseJson(Context context) {
+        ParseJson(Context context) {
             this.context = context;
         }
 
         @Override
         protected List<RecipeDetails> doInBackground(Void... voids) {
             Recipe recipe = new Recipe(context);
+
             return recipe.getList();
         }
         @Override

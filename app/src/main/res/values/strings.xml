@@ -6,4 +6,6 @@
     <string name="ingredients_header">Ingredients</string>
     <string name="steps_header">Steps</string>
     <string name="todo">TODO</string>
+    <string name="previous_step">Previuos Step</string>
+    <string name="next_step">Next Step</string>
 </resources>

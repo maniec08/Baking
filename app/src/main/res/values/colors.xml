@@ -3,6 +3,8 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="header">#63E246</color>
-    <color name="step_header">#627E5C</color>
+    <color name="header">#C1ECB6</color>
+    <color name="step_header">#D4C9EE</color>
+    <color name="steps">#F0F5ED</color>
+    <color name="highlighted_text_light">#9983CC39</color>
 </resources>

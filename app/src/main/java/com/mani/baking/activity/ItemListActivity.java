@@ -50,27 +50,24 @@ public class ItemListActivity extends AppCompatActivity {
         recipeDetails = getIntent().getParcelableExtra(KeyConstants.RECIPE);
 
         toolbar.setTitle(recipeDetails.getName());
-        // setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+         setSupportActionBar(toolbar);
 
         twoPane = getResources().getBoolean(R.bool.istablet);
         addClickListener();
+
         setupRecyclerView();
     }
 
     private void addClickListener() {
         final Context context = this;
-        ingredientTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle arguments = new Bundle();
-                arguments.putParcelableArrayList(KeyConstants.RECIPE, (ArrayList<? extends Parcelable>) recipeDetails.getIngredientDetailsList());
+        ingredientTextView.setOnClickListener(v -> {
+            Bundle arguments = new Bundle();
+            arguments.putParcelableArrayList(KeyConstants.RECIPE, (ArrayList<? extends Parcelable>) recipeDetails.getIngredientDetailsList());
 
-                ItemDetailFragment fragment = new ItemDetailFragment();
-                fragment.setArguments(arguments);
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.item_detail_container, fragment)
-                        .commit();
-            }
+            Intent intent = new Intent(context, IngredientActivity.class);
+            intent.putExtra(KeyConstants.RECIPE, arguments);
+            context.startActivity(intent);
         });
     }
 
