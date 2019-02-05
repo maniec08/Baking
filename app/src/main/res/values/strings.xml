@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Baking</string>
+    <string name="title_item_detail">Item Detail</string>
+    <string name="error_loading_data">Error Loading Data</string>
+    <string name="baking">Baking</string>
+    <string name="ingredients_header">Ingredients</string>
+    <string name="steps_header">Steps</string>
+    <string name="todo">TODO</string>
+</resources>

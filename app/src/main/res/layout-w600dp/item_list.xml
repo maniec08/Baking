@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="250dp"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:baselineAligned="false"
+    android:divider="?android:attr/dividerHorizontal"
+    android:orientation="vertical"
+    android:showDividers="middle"
+    tools:context=".activity.ItemListActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/temp_padding1"
+            android:layout_width="match_parent"
+            android:layout_height="5dp" />
+
+        <TextView
+            android:id="@+id/ingredients_header"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/temp_padding1"
+            android:background="@color/header"
+            android:gravity="center_vertical"
+            android:text="@string/ingredients_header"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+
+        <View
+            android:id="@+id/temp_padding2"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_below="@id/ingredients_header" />
+
+        <TextView
+            android:id="@+id/step_header"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/temp_padding2"
+            android:background="@color/step_header"
+            android:gravity="center_vertical"
+            android:text="@string/steps_header"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+
+        <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/item_list"
+            android:name="@string/steps_header"
+            android:layout_width="@dimen/item_width"
+            android:layout_height="match_parent"
+            android:layout_below="@id/step_header"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            tools:context=".activity.ItemListActivity"
+            tools:listitem="@layout/item_list_content" />
+    </RelativeLayout>
+
+    <!--
+    This layout is a two-pane layout for the Items
+    master/detail flow.
+
+    -->
+    <FrameLayout
+        android:id="@+id/item_detail_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical" />
+
+</LinearLayout>
