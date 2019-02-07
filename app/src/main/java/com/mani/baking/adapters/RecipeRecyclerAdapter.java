@@ -10,7 +10,9 @@ import android.widget.TextView;
 import com.mani.baking.R;
 import com.mani.baking.activity.ItemDetailActivity;
 import com.mani.baking.activity.ItemListActivity;
+import com.mani.baking.datastruct.Recipe;
 import com.mani.baking.datastruct.RecipeDetails;
+import com.mani.baking.utils.KeyConstants;
 
 import java.util.List;
 
@@ -59,8 +61,9 @@ public class RecipeRecyclerAdapter  extends RecyclerView.Adapter<RecipeRecyclerA
     }
 
     private void launchIntent(int adapterPosition) {
+        Recipe.selectedRecipe = adapterPosition;
+        Recipe.selectedStep = -1;
         Intent intent = new Intent(context, ItemListActivity.class);
-        intent.putExtra("recipe", recipes.get(adapterPosition));
         context.startActivity(intent);
     }
 }

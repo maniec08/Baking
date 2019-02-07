@@ -1,7 +1,9 @@
 package com.mani.baking.activity;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import com.mani.baking.R;
 import com.mani.baking.adapters.IngredientsRecyclerAdapter;
 import com.mani.baking.datastruct.IngredientDetails;
+import com.mani.baking.datastruct.Recipe;
 import com.mani.baking.datastruct.RecipeDetails;
 import com.mani.baking.utils.KeyConstants;
 
@@ -26,34 +29,53 @@ import butterknife.ButterKnife;
 
 public class IngredientFragment extends Fragment {
 
-    private RecipeDetails recipeDetails;
-    private List<IngredientDetails> ingredientDetailsList;
+    private static final String TAG = IngredientFragment.class.getSimpleName();
+
+    @BindView(R.id.ingredient_recycler_view)
     RecyclerView recyclerView;
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    private boolean twoPane = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getActivity().getIntent().getParcelableExtra(KeyConstants.RECIPE);
-        ingredientDetailsList = bundle.getParcelableArrayList(KeyConstants.RECIPE);
-        ActionBar actionBar = getActivity().getActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        twoPane = getResources().getBoolean(R.bool.istablet);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.ingredient, container, false);
+        ButterKnife.bind(this, rootView);
 
-        Toolbar toolbar = rootView.findViewById(R.id.toolbar);
+        setUpToolBar();
+        setUpRecyclerView();
+        return rootView;
+    }
+
+    private void setUpToolBar() {
+
         toolbar.setTitle(R.string.ingredients_header);
-        recyclerView = rootView.findViewById(R.id.ingredient_recycler_view);
-        IngredientsRecyclerAdapter ingredientsRecyclerAdapter = new IngredientsRecyclerAdapter(ingredientDetailsList);
+        if (!twoPane) {
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+            toolbar.setNavigationOnClickListener(v -> {
+                try {
+                    getActivity().onBackPressed();
+                } catch (Exception e) {
+                    Log.d(TAG, e.getMessage());
+                }
+            });
+        }
+    }
+
+    private void setUpRecyclerView() {
+        IngredientsRecyclerAdapter ingredientsRecyclerAdapter =
+                new IngredientsRecyclerAdapter(getContext());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(ingredientsRecyclerAdapter);
-        return rootView;
     }
+
 }

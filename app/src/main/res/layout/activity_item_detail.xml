@@ -1,30 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".activity.ItemDetailActivity"
-    tools:ignore="MergeRootFrame">
+    tools:context=".activity.ItemDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/detail_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+                android:background="?attr/colorPrimary"
+                android:layout_gravity="center_horizontal" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/linear_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -33,7 +30,6 @@
             android:id="@+id/video_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="5dp"
             android:layout_weight="0.50" />
 
         <ScrollView
@@ -44,29 +40,24 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="2dp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/steps_describtion_tv"
+                    android:id="@+id/steps_short_description_tv"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text=""
-                    android:gravity="center"
-                    android:textAlignment="center"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:textStyle="bold"
                     android:textSize="20sp" />
 
-                <ImageView
-                    android:id="@+id/recipe_steps_image"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/todo" />
-
                 <TextView
-                    android:id="@+id/tv_steps_desc"
+                    android:id="@+id/steps_description_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:padding="5dp" />
+                    android:padding="3dp"
+                    android:textSize="17sp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -79,7 +70,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:background="@drawable/rounded_buttonleft"
+                        android:background="@drawable/rounded_button_left"
                         android:text="@string/previous_step" />
 
                     <Button
@@ -93,9 +84,6 @@
 
                 </LinearLayout>
             </LinearLayout>
-
         </ScrollView>
     </LinearLayout>
-
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

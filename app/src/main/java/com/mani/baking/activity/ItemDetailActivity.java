@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.mani.baking.R;
+import com.mani.baking.datastruct.Recipe;
 import com.mani.baking.datastruct.RecipeDetails;
 import com.mani.baking.datastruct.StepDetails;
 import com.mani.baking.utils.KeyConstants;
@@ -23,13 +24,12 @@ import butterknife.ButterKnife;
  * in a {@link ItemListActivity}.
  */
 public class ItemDetailActivity extends AppCompatActivity {
-    private StepDetails stepDetails;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.item_detail);
-        stepDetails = getIntent().getParcelableExtra(KeyConstants.RECIPE);
 
 
         // savedInstanceState is non-null when there is fragment state
@@ -44,10 +44,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putParcelable(KeyConstants.RECIPE, stepDetails);
             ItemDetailFragment fragment = new ItemDetailFragment();
-            fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.item_detail_container, fragment)
                     .commit();

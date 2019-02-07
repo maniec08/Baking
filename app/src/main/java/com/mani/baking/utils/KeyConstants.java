@@ -4,6 +4,9 @@ public class KeyConstants {
 
  //parcelable
  public static final String RECIPE= "recipe";
+ public static final String STEP_POSITION= "step_position";
+    public static final String PLAYER_POSITION= "player_position";
+    public static final String RECIPE_POSITION= "recipe_position";
 
    //Recipe and Steps
     public static final String id = "id";

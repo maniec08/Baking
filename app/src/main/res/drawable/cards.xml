@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid
+        android:color="@color/card_background" />
+    <stroke
+        android:color="#C78F1E"
+        android:width="0.5dp" />
+    <gradient
+        android:centerColor="@color/header"/>
+    <corners
+        android:topRightRadius="50dp"
+        android:bottomRightRadius="50dp"
+        android:topLeftRadius="50dp"
+        android:bottomLeftRadius="50dp"/>
+</shape>

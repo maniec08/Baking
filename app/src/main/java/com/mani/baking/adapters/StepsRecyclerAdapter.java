@@ -1,6 +1,5 @@
 package com.mani.baking.adapters;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,11 +11,8 @@ import com.mani.baking.R;
 import com.mani.baking.activity.ItemDetailActivity;
 import com.mani.baking.activity.ItemDetailFragment;
 import com.mani.baking.activity.ItemListActivity;
-import com.mani.baking.datastruct.StepDetails;
+import com.mani.baking.datastruct.Recipe;
 import com.mani.baking.utils.KeyConstants;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,27 +20,23 @@ import androidx.recyclerview.widget.RecyclerView;
 public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdapter.ViewHolder> {
 
     private final ItemListActivity parentActivity;
-    private final ArrayList<StepDetails> stepDetailsList;
     private final boolean twoPane;
 
     private void startFragment(int position) {
-        Bundle arguments = new Bundle();
-        arguments.putParcelable(KeyConstants.RECIPE, stepDetailsList.get(position));
+        Recipe.selectedStep =position;
         if (twoPane) {
+            Recipe.selectedStep = position;
             ItemDetailFragment fragment = new ItemDetailFragment();
-            //fragment.setArguments(arguments);
             parentActivity.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.item_detail_container, fragment)
                     .commit();
         } else {
             Intent intent = new Intent(parentActivity, ItemDetailActivity.class);
-            intent.putExtra(KeyConstants.RECIPE,  stepDetailsList.get(position));
             parentActivity.startActivity(intent);
         }
     }
 
-    public StepsRecyclerAdapter(ItemListActivity parent, List<StepDetails> stepDetails, boolean twoPane) {
-        this.stepDetailsList = (ArrayList) stepDetails;
+    public StepsRecyclerAdapter(ItemListActivity parent, boolean twoPane) {
         this.parentActivity = parent;
         this.twoPane = twoPane;
     }
@@ -59,12 +51,13 @@ public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.textView.setText(stepDetailsList.get(position).getShortDescribtion());
+        holder.textView.setText(
+                Recipe.getStepDetails(position).getShortDescribtion());
     }
 
     @Override
     public int getItemCount() {
-        return stepDetailsList.size();
+        return Recipe.getRecipeDetails().getStepDetailsList().size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

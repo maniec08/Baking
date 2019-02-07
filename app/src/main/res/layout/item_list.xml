@@ -1,61 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:baselineAligned="false"
-    android:divider="?android:attr/dividerHorizontal"
-    android:orientation="vertical"
-    android:showDividers="middle"
+    android:fitsSystemWindows="true"
     tools:context=".activity.ItemListActivity">
 
-    <View
-        android:id="@+id/temp_padding1"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="5dp" />
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-    <TextView
-        android:id="@+id/ingredients_header"
-        android:layout_below="@id/temp_padding1"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/ingredients"
-        android:gravity="center_vertical"
-        android:text="@string/ingredients_header"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <View
-        android:id="@+id/temp_padding2"
-        android:layout_below="@id/ingredients_header"
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
-
-    <TextView
-        android:id="@+id/step_header"
-        android:layout_below="@id/temp_padding2"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/steps_header"
-        android:gravity="center_vertical"
-        android:text="@string/steps_header"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/item_list"
-        android:layout_below="@id/step_header"
-        android:name="@string/steps_header"
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        tools:context=".activity.ItemListActivity"
-        tools:listitem="@layout/item_list_content" />
-</RelativeLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <include layout="@layout/activity_item_list" />
+    </FrameLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

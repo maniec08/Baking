@@ -4,6 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+
     android:padding="5dp">
     <androidx.cardview.widget.CardView
         android:layout_height="75dp"
@@ -11,12 +12,14 @@
         android:layout_gravity="center">
        <TextView
            android:layout_width="match_parent"
-           android:layout_height="wrap_content"
+           android:layout_height="70dp"
            android:id="@+id/recipe_text_view"
            android:textSize="35sp"
+           android:textStyle="bold"
            android:layout_centerHorizontal="true"
-           android:layout_gravity="center"
-           android:textAlignment="center" />
+           android:gravity="center"
+           android:textAlignment="center"
+           android:background="@drawable/cards" />
     </androidx.cardview.widget.CardView>
 
 

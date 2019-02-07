@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="header">#C1ECB6</color>
+    <color name="ingredients_row_background">#3B454B45</color>
+    <color name="card_background">#DEF8D8</color>
     <color name="step_header">#D4C9EE</color>
     <color name="steps">#F0F5ED</color>
     <color name="highlighted_text_light">#9983CC39</color>

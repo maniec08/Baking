@@ -16,15 +16,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class IngredientActivity extends AppCompatActivity {
+
     @Override
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         setContentView(R.layout.item_detail);
         ButterKnife.bind(this);
-
-        Bundle arguments = getIntent().getParcelableExtra(KeyConstants.RECIPE);
         IngredientFragment ingredientFragment = new IngredientFragment();
-        ingredientFragment.setArguments(arguments);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.item_detail_container,ingredientFragment)
                 .commit();
