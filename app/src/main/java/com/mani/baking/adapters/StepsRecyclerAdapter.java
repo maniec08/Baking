@@ -25,8 +25,8 @@ public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdap
     private void startFragment(int position) {
         Recipe.selectedStep =position;
         if (twoPane) {
-            Recipe.selectedStep = position;
             ItemDetailFragment fragment = new ItemDetailFragment();
+            ItemDetailFragment.currentSelection = position;
             parentActivity.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.item_detail_container, fragment)
                     .commit();

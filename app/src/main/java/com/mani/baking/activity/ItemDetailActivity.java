@@ -3,19 +3,10 @@ package com.mani.baking.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.mani.baking.R;
-import com.mani.baking.datastruct.Recipe;
-import com.mani.baking.datastruct.RecipeDetails;
-import com.mani.baking.datastruct.StepDetails;
-import com.mani.baking.utils.KeyConstants;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * An activity representing a single Item detail screen. This

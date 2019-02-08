@@ -4,6 +4,8 @@ package com.mani.baking.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -36,7 +38,7 @@ public class ItemListActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     @BindView(R.id.ingredients_header)
     TextView ingredientTextView;
-
+    ItemDetailFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +49,6 @@ public class ItemListActivity extends AppCompatActivity {
         twoPane = getResources().getBoolean(R.bool.istablet);
         addClickListener();
         setupRecyclerView();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         if(twoPane) {
             if (Recipe.selectedStep >= 0) {
                 startStepTransaction();
@@ -59,6 +56,11 @@ public class ItemListActivity extends AppCompatActivity {
                 startIngredientTransaction();
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
 
@@ -87,10 +89,11 @@ public class ItemListActivity extends AppCompatActivity {
         });
     }
 
+
     private void startStepTransaction(){
 
         if (twoPane) {
-            ItemDetailFragment fragment = new ItemDetailFragment();
+            fragment = new ItemDetailFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.item_detail_container, fragment)
                     .commit();

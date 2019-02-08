@@ -1,7 +1,6 @@
 package com.mani.baking.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,12 +25,10 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.material.appbar.AppBarLayout;
 import com.mani.baking.R;
 import com.mani.baking.datastruct.Recipe;
-import com.mani.baking.datastruct.RecipeDetails;
 import com.mani.baking.datastruct.StepDetails;
 import com.mani.baking.utils.KeyConstants;
 
-import java.util.List;
-import java.util.Objects;
+import java.security.Key;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -53,9 +50,10 @@ public class ItemDetailFragment extends Fragment {
 
     private static final String TAG = ItemDetailFragment.class.getSimpleName();
     private boolean twoPane = false;
-    private ExoPlayer exoPlayer;
-    private long playerPosition = 100L;
-
+    public ExoPlayer exoPlayer;
+    public static Long playerPosition = 1L;
+    public static int currentSelection = -1;
+    public static int instanceSavedForStep = -1;
     public ItemDetailFragment() {
     }
 
@@ -79,7 +77,9 @@ public class ItemDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        if(savedInstanceState!=null){
+            playerPosition = savedInstanceState.getLong(KeyConstants.PLAYER_POSITION,1L);
+        }
     }
 
     @Override
@@ -88,10 +88,6 @@ public class ItemDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.activity_item_detail, container, false);
         ButterKnife.bind(this, rootView);
         twoPane = getResources().getBoolean(R.bool.istablet);
-        if(savedInstanceState!=null){
-            playerPosition = savedInstanceState.getLong(KeyConstants.PLAYER_POSITION, playerPosition);
-        }
-
         return rootView;
     }
 
@@ -104,13 +100,14 @@ public class ItemDetailFragment extends Fragment {
         }
 
         int orientation = getResources().getConfiguration().orientation;
-        initializePlayer();
+        setUpPlayer();
         setUpToolBar();
+        setUpButton();
 
         description.setText(getCurrentStep().getDescribtion());
         shortDescription.setText(getCurrentStep().getShortDescribtion());
 
-        if (isNullOrEmpty(getCurrentStep().getVideoUrl())) {
+        if (isNullOrEmpty(getVideoUrl())) {
             playerView.setVisibility(View.GONE);
             linearLayout.setPaddingRelative(2, 200, 2, 2);
         } else if (orientation == ORIENTATION_LANDSCAPE && !twoPane) {
@@ -121,6 +118,13 @@ public class ItemDetailFragment extends Fragment {
             playerView.getLayoutParams().height = 0;
         }
 
+    }
+
+    private void setUpButton() {
+        if(twoPane){
+            nextButton.setVisibility(View.GONE);
+            previousButton.setVisibility(View.GONE);
+        }
     }
 
     private void setUpToolBar() {
@@ -152,24 +156,26 @@ public class ItemDetailFragment extends Fragment {
         nextButton.setOnClickListener(v -> {
             Recipe.selectedStep++;
             previousButton.setEnabled(true);
-            if ( Recipe.selectedStep > maxStep) {
+            if (Recipe.selectedStep > maxStep) {
                 Recipe.selectedStep = maxStep;
             }
-            if ( Recipe.selectedStep == maxStep) {
+            if (Recipe.selectedStep == maxStep) {
                 nextButton.setEnabled(false);
             }
+            playerPosition =1L;
             setUpUi();
         });
 
         previousButton.setOnClickListener(v -> {
             Recipe.selectedStep--;
             nextButton.setEnabled(true);
-            if ( Recipe.selectedStep < 0) {
+            if (Recipe.selectedStep < 0) {
                 Recipe.selectedStep = 0;
             }
-            if ( Recipe.selectedStep == 0) {
+            if (Recipe.selectedStep == 0) {
                 previousButton.setEnabled(false);
             }
+            playerPosition =1L;
             setUpUi();
         });
     }
@@ -178,46 +184,37 @@ public class ItemDetailFragment extends Fragment {
     public void onResume() {
         super.onResume();
         setUpUi();
-        setUpButtonClickListener();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
+        if(!twoPane) {
+            setUpButtonClickListener();
+        }
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle savedInstance) {
-        savedInstance.putLong(KeyConstants.PLAYER_POSITION, playerPosition);
+        if(exoPlayer!=null){
+            instanceSavedForStep = Recipe.selectedStep;
+            savedInstance.putLong(KeyConstants.PLAYER_POSITION, exoPlayer.getCurrentPosition());
+        }
         super.onSaveInstanceState(savedInstance);
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstance) {
-        super.onActivityCreated(savedInstance);
-        if (savedInstance != null) {
-            playerPosition = savedInstance.getLong(KeyConstants.PLAYER_POSITION, playerPosition);
-        }
-    }
-
-    @Override
     public void onPause() {
-        if (exoPlayer != null) {
+        if (exoPlayer != null && currentSelection == instanceSavedForStep) {
             playerPosition = exoPlayer.getCurrentPosition();
-            destroyPlayer();
+        } else {
+            playerPosition = 1L;
         }
         super.onPause();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
     private void destroyPlayer() {
         if (exoPlayer != null) {
-            playerPosition = exoPlayer.getCurrentPosition();
+            if (currentSelection == instanceSavedForStep) {
+                playerPosition = exoPlayer.getCurrentPosition();
+            } else {
+                playerPosition = 1L;
+            }
             exoPlayer.stop();
             exoPlayer.release();
             exoPlayer = null;
@@ -228,14 +225,23 @@ public class ItemDetailFragment extends Fragment {
     public void onDestroy() {
         destroyPlayer();
         super.onDestroy();
+
     }
 
     public StepDetails getCurrentStep() {
         return Recipe.getStepDetails();
     }
 
-    private void initializePlayer() {
+    private String getVideoUrl() {
         String url = getCurrentStep().getVideoUrl();
+        if (isNullOrEmpty(url) && !isNullOrEmpty(getCurrentStep().getThumbnailUrl())) {
+            return getCurrentStep().getThumbnailUrl();
+        }
+        return url;
+    }
+
+    private void setUpPlayer() {
+        String url = getVideoUrl();
         if (url == null || url.isEmpty()) {
             playerView.setVisibility(View.INVISIBLE);
         } else {
@@ -247,12 +253,14 @@ public class ItemDetailFragment extends Fragment {
                 exoPlayer = ExoPlayerFactory.newSimpleInstance(new DefaultRenderersFactory(getContext()), trackSelector, loadControl);
                 playerView.setPlayer(exoPlayer);
                 exoPlayer.setPlayWhenReady(true);
-                exoPlayer.seekTo(playerPosition);
+                // exoPlayer.seekTo(Recipe.playerPosition);
             } else {
-                exoPlayer.seekTo(1L);
+               // Recipe.setPlayerPosition(1L);
+                playerPosition =1L ;
             }
+            exoPlayer.seekTo(playerPosition);
             MediaSource videoSource = new ExtractorMediaSource
-                    .Factory(new DefaultHttpDataSourceFactory("ua"))
+                    .Factory(new DefaultHttpDataSourceFactory("load_uri")).setMinLoadableRetryCount(3)
                     .createMediaSource(mediaUri);
             exoPlayer.prepare(videoSource, false, false);
 

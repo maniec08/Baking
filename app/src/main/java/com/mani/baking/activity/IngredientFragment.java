@@ -7,17 +7,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.mani.baking.R;
 import com.mani.baking.adapters.IngredientsRecyclerAdapter;
-import com.mani.baking.datastruct.IngredientDetails;
-import com.mani.baking.datastruct.Recipe;
-import com.mani.baking.datastruct.RecipeDetails;
-import com.mani.baking.utils.KeyConstants;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -49,7 +42,6 @@ public class IngredientFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.ingredient, container, false);
         ButterKnife.bind(this, rootView);
-
         setUpToolBar();
         setUpRecyclerView();
         return rootView;

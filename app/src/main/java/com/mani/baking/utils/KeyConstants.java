@@ -7,7 +7,7 @@ public class KeyConstants {
  public static final String STEP_POSITION= "step_position";
     public static final String PLAYER_POSITION= "player_position";
     public static final String RECIPE_POSITION= "recipe_position";
-
+    public static final String RECYCLER_STATE= "recycler_position";
    //Recipe and Steps
     public static final String id = "id";
 

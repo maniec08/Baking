@@ -1,17 +1,21 @@
 package com.mani.baking.datastruct;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
 
 import com.mani.baking.utils.ExtractJson;
+import com.mani.baking.utils.KeyConstants;
 
 import java.util.List;
 
 public class Recipe {
     public static int selectedRecipe = 0;
     public static int selectedStep = -1;
+
     public static List<RecipeDetails> recipeDetailsList;
     private Context context;
-    public Recipe(){}
+
     public Recipe(Context context) {
         this.context = context;
     }
