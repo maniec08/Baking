@@ -1,10 +1,8 @@
 package com.mani.baking.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
@@ -16,7 +14,6 @@ import com.mani.baking.datastruct.RecipeDetails;
 
 import java.util.List;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
