@@ -9,9 +9,8 @@ import android.os.Bundle;
 import android.widget.RemoteViews;
 
 import com.mani.baking.R;
-import com.mani.baking.activity.WidgetMainActivity;
 import com.mani.baking.datastruct.Recipe;
-import com.mani.baking.utils.ExtractJson;
+
 
 public class WidgetProvider extends AppWidgetProvider {
 
@@ -21,22 +20,19 @@ public class WidgetProvider extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
         new Recipe(context).getList();
-        // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 
-        //Intent to be set when 'Next' button is clicked
         Intent nextIntent = WidgetService.getActionNextRecipeIntent(context);
         PendingIntent nextPendingIntent = PendingIntent.getService(context, intentId++, nextIntent, 0);
         views.setOnClickPendingIntent(R.id.next_step_button, nextPendingIntent);
 
-        //Intent to be set when 'Previous' button is clicked
         Intent previousIntent = WidgetService.getActionPreviousRecipeIntent(context);
         PendingIntent previousPendingIntent = PendingIntent.getService(context, intentId++, previousIntent , 0);
         views.setOnClickPendingIntent(R.id.previous_step_button, previousPendingIntent);
+
         views.setTextViewText(R.id.widget_tv, Recipe.getRecipeDetails(id).getName());
         Intent intent = new Intent(context, IngredientListViewService.class);
         views.setRemoteAdapter(R.id.widget_lv, intent);
-
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
@@ -60,7 +56,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
-        super.onDeleted(context, appWidgetIds);
+
     }
 
     @Override

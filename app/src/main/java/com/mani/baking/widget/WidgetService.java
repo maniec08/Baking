@@ -43,20 +43,17 @@ public class WidgetService extends IntentService {
                    WidgetProvider.id =0;
                }
 
-                handleActionTraversal();
+                handleAction();
             } else if (ACTION_ON_WIDGET_PREVIOUS.equals(action)) {
                 if ( --WidgetProvider.id < 0) {
                     WidgetProvider.id = Recipe.recipeDetailsList.size()-1;
                 }
-                handleActionTraversal();
+                handleAction();
             }
         }
     }
 
-    /**
-     * Updates all widget and notifies the data changed
-     */
-    private void handleActionTraversal() {
+    private void handleAction() {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, WidgetProvider.class));
         WidgetProvider.updateAllWidgets(this, appWidgetManager, appWidgetIds);

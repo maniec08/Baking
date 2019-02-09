@@ -1,7 +1,6 @@
 package com.mani.baking.adapters;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +11,11 @@ import com.mani.baking.activity.ItemDetailActivity;
 import com.mani.baking.activity.ItemDetailFragment;
 import com.mani.baking.activity.ItemListActivity;
 import com.mani.baking.datastruct.Recipe;
-import com.mani.baking.utils.KeyConstants;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdapter.ViewHolder> {
 
@@ -26,6 +26,7 @@ public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdap
         Recipe.selectedStep =position;
         if (twoPane) {
             ItemDetailFragment fragment = new ItemDetailFragment();
+            //Updating the selection is used to update player seek position
             ItemDetailFragment.currentSelection = position;
             parentActivity.getSupportFragmentManager().beginTransaction()
                     .replace(R.id.item_detail_container, fragment)
@@ -45,14 +46,14 @@ public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdap
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_list_content, parent, false);
+                .inflate(R.layout.steps_row, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.textView.setText(
-                Recipe.getStepDetails(position).getShortDescribtion());
+                Recipe.getStepDetails(position).getShortDescription());
     }
 
     @Override
@@ -61,19 +62,16 @@ public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdap
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @BindView(R.id.steps_content_tv)
         TextView textView;
-
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.content);
+            ButterKnife.bind(this,itemView );
             textView.setOnClickListener(this);
         }
-
         @Override
         public void onClick(View v) {
             startFragment(getAdapterPosition());
         }
     }
-
-
 }

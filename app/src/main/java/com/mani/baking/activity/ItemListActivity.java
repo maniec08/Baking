@@ -91,7 +91,6 @@ public class ItemListActivity extends AppCompatActivity {
 
 
     private void startStepTransaction(){
-
         if (twoPane) {
             fragment = new ItemDetailFragment();
             getSupportFragmentManager().beginTransaction()
@@ -100,7 +99,6 @@ public class ItemListActivity extends AppCompatActivity {
         }
     }
     private void startIngredientTransaction() {
-
         IngredientFragment ingredientFragment = new IngredientFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.item_detail_container, ingredientFragment)
@@ -113,6 +111,4 @@ public class ItemListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(stepsRecyclerAdapter);
     }
-
-
 }

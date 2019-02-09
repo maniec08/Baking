@@ -57,5 +57,5 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         tools:context=".activity.ItemListActivity"
-        tools:listitem="@layout/item_list_content" />
+        tools:listitem="@layout/steps_row" />
 </RelativeLayout>

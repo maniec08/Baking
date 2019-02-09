@@ -5,9 +5,9 @@ import android.os.Parcelable;
 
 public class StepDetails implements Parcelable {
 
-    private int id;
-    private String shortDescribtion;
-    private String describtion;
+    private String id;
+    private String shortDescription;
+    private String description;
     private String videoUrl;
     private String thumbnailUrl;
 
@@ -15,9 +15,9 @@ public class StepDetails implements Parcelable {
     }
 
     protected StepDetails(Parcel in) {
-        id = in.readInt();
-        shortDescribtion = in.readString();
-        describtion = in.readString();
+        id = in.readString();
+        shortDescription = in.readString();
+        description = in.readString();
         videoUrl = in.readString();
         thumbnailUrl = in.readString();
     }
@@ -34,28 +34,28 @@ public class StepDetails implements Parcelable {
         }
     };
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getShortDescribtion() {
-        return shortDescribtion;
+    public String getShortDescription() {
+        return shortDescription;
     }
 
-    public void setShortDescribtion(String shortDescribtion) {
-        this.shortDescribtion = shortDescribtion;
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
     }
 
-    public String getDescribtion() {
-        return describtion;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescribtion(String describtion) {
-        this.describtion = describtion;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getVideoUrl() {
@@ -81,9 +81,9 @@ public class StepDetails implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(shortDescribtion);
-        dest.writeString(describtion);
+        dest.writeString(id);
+        dest.writeString(shortDescription);
+        dest.writeString(description);
         dest.writeString(videoUrl);
         dest.writeString(thumbnailUrl);
     }

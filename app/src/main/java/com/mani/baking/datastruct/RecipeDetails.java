@@ -9,18 +9,18 @@ import java.util.Objects;
 
 public class RecipeDetails implements Parcelable {
 
-    private int id;
+    private String id;
     private String name;
     private String servings;
     private String imageUrl;
     private List<IngredientDetails> ingredientDetailsList;
     private List<StepDetails> stepDetailsList;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -71,7 +71,7 @@ public class RecipeDetails implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.id);
+        dest.writeString(this.id);
         dest.writeString(this.name);
         dest.writeString(this.servings);
         dest.writeString(this.imageUrl);
@@ -84,7 +84,7 @@ public class RecipeDetails implements Parcelable {
     }
 
     private RecipeDetails(Parcel parcel) {
-        id = parcel.readInt();
+        id = parcel.readString();
         name = parcel.readString();
         servings = parcel.readString();
         imageUrl = parcel.readString();

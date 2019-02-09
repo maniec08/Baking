@@ -1,6 +1,5 @@
 package com.mani.baking.activity;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,8 +27,6 @@ import com.mani.baking.datastruct.Recipe;
 import com.mani.baking.datastruct.StepDetails;
 import com.mani.baking.utils.KeyConstants;
 
-import java.security.Key;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -50,10 +47,10 @@ public class ItemDetailFragment extends Fragment {
 
     private static final String TAG = ItemDetailFragment.class.getSimpleName();
     private boolean twoPane = false;
-    public ExoPlayer exoPlayer;
-    public static Long playerPosition = 1L;
+    private ExoPlayer exoPlayer;
+    private static Long playerPosition = 1L;
     public static int currentSelection = -1;
-    public static int instanceSavedForStep = -1;
+    private static int instanceSavedForStep = -1;
     public ItemDetailFragment() {
     }
 
@@ -92,11 +89,11 @@ public class ItemDetailFragment extends Fragment {
     }
 
     private void setUpUi() {
-        if (isNullOrEmpty(getCurrentStep().getDescribtion())) {
-            getCurrentStep().setDescribtion("");
+        if (isNullOrEmpty(getCurrentStep().getDescription())) {
+            getCurrentStep().setDescription("");
         }
-        if (isNullOrEmpty(getCurrentStep().getShortDescribtion())) {
-            getCurrentStep().setShortDescribtion("");
+        if (isNullOrEmpty(getCurrentStep().getShortDescription())) {
+            getCurrentStep().setShortDescription("");
         }
 
         int orientation = getResources().getConfiguration().orientation;
@@ -104,8 +101,8 @@ public class ItemDetailFragment extends Fragment {
         setUpToolBar();
         setUpButton();
 
-        description.setText(getCurrentStep().getDescribtion());
-        shortDescription.setText(getCurrentStep().getShortDescribtion());
+        description.setText(getCurrentStep().getDescription());
+        shortDescription.setText(getCurrentStep().getShortDescription());
 
         if (isNullOrEmpty(getVideoUrl())) {
             playerView.setVisibility(View.GONE);
@@ -117,10 +114,15 @@ public class ItemDetailFragment extends Fragment {
             linearLayout.setPaddingRelative(0, 40, 0, 0);
             playerView.getLayoutParams().height = 0;
         }
-
     }
 
     private void setUpButton() {
+        if(Recipe.selectedStep == 0){
+            previousButton.setEnabled(false);
+        }
+        if(Recipe.selectedStep == Recipe.getRecipeDetails().getStepDetailsList().size()-1){
+            nextButton.setEnabled(false);
+        }
         if(twoPane){
             nextButton.setVisibility(View.GONE);
             previousButton.setVisibility(View.GONE);
@@ -147,7 +149,7 @@ public class ItemDetailFragment extends Fragment {
         }
     }
 
-    public boolean isNullOrEmpty(String string) {
+    private boolean isNullOrEmpty(String string) {
         return string == null || string.isEmpty();
     }
 
@@ -228,7 +230,7 @@ public class ItemDetailFragment extends Fragment {
 
     }
 
-    public StepDetails getCurrentStep() {
+    private StepDetails getCurrentStep() {
         return Recipe.getStepDetails();
     }
 
@@ -253,9 +255,7 @@ public class ItemDetailFragment extends Fragment {
                 exoPlayer = ExoPlayerFactory.newSimpleInstance(new DefaultRenderersFactory(getContext()), trackSelector, loadControl);
                 playerView.setPlayer(exoPlayer);
                 exoPlayer.setPlayWhenReady(true);
-                // exoPlayer.seekTo(Recipe.playerPosition);
             } else {
-               // Recipe.setPlayerPosition(1L);
                 playerPosition =1L ;
             }
             exoPlayer.seekTo(playerPosition);
@@ -263,10 +263,7 @@ public class ItemDetailFragment extends Fragment {
                     .Factory(new DefaultHttpDataSourceFactory("load_uri")).setMinLoadableRetryCount(3)
                     .createMediaSource(mediaUri);
             exoPlayer.prepare(videoSource, false, false);
-
         }
     }
-
-
 }
 

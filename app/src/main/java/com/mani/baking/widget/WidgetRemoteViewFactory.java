@@ -43,7 +43,7 @@ public class WidgetRemoteViewFactory implements RemoteViewsService.RemoteViewsFa
     @Override
     public RemoteViews getViewAt(int position) {
         RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.ingrdient_row_widget);
-        rv.setTextViewText(R.id.quantity_tv,Integer.toString(ingredientDetails.get(position).getQuantity()));
+        rv.setTextViewText(R.id.quantity_tv,ingredientDetails.get(position).getQuantity());
         rv.setTextViewText(R.id.measure_tv,ingredientDetails.get(position).getMeasure());
         rv.setTextViewText(R.id.ingredient_tv,ingredientDetails.get(position).getIngredient());
         return rv;

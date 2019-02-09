@@ -10,10 +10,13 @@ import com.mani.baking.utils.KeyConstants;
 import java.util.List;
 
 public class Recipe {
+    /**
+     * Session variables used to pass on the data
+     */
     public static int selectedRecipe = 0;
     public static int selectedStep = -1;
-
     public static List<RecipeDetails> recipeDetailsList;
+
     private Context context;
 
     public Recipe(Context context) {
@@ -34,9 +37,6 @@ public class Recipe {
         return recipeDetailsList.get(selectedRecipe);
     }
 
-    public static StepDetails getStepDetails(int recipePosition, int stepPosition){
-        return getRecipeDetails(recipePosition).getStepDetailsList().get(stepPosition);
-    }
     public static StepDetails getStepDetails( int stepPosition){
         return getRecipeDetails(selectedRecipe).getStepDetailsList().get(stepPosition);
     }
@@ -46,9 +46,5 @@ public class Recipe {
     private void setRecipeDetailsList() {
         ExtractJson extractJson = new ExtractJson();
         Recipe.recipeDetailsList = extractJson.getRecipeDetails(context);
-    }
-
-    public static void setDetailsList(List<RecipeDetails> recipeDetailsList) {
-        Recipe.recipeDetailsList = recipeDetailsList;
     }
 }

@@ -21,6 +21,8 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class IngredientsRecyclerAdapter extends RecyclerView.Adapter<IngredientsRecyclerAdapter.ViewHolder> {
 
@@ -41,7 +43,7 @@ public class IngredientsRecyclerAdapter extends RecyclerView.Adapter<Ingredients
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.quantityTextView.setText(Integer.toString(ingredientDetails.get(position).getQuantity()));
+        holder.quantityTextView.setText(ingredientDetails.get(position).getQuantity());
         holder.measureTextView.setText(ingredientDetails.get(position).getMeasure());
         holder.ingredientTextView.setText(ingredientDetails.get(position).getIngredient());
         if(position%2 ==0){
@@ -55,17 +57,15 @@ public class IngredientsRecyclerAdapter extends RecyclerView.Adapter<Ingredients
     }
 
      class ViewHolder extends RecyclerView.ViewHolder  {
+        @BindView(R.id.quantity_tv)
         TextView quantityTextView;
-        TextView measureTextView;
-        TextView ingredientTextView;
-        LinearLayout linearLayout;
+         @BindView(R.id.measure_tv) TextView measureTextView;
+         @BindView(R.id.ingredient_tv)TextView ingredientTextView;
+         @BindView(R.id.ingredient_row)LinearLayout linearLayout;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            linearLayout = itemView.findViewById(R.id.ingredient_row);
-            quantityTextView = itemView.findViewById(R.id.quantity_tv);
-            measureTextView = itemView.findViewById(R.id.measure_tv);
-            ingredientTextView = itemView.findViewById(R.id.ingredient_tv);
+            ButterKnife.bind(this,itemView);
         }
     }
 

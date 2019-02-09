@@ -18,11 +18,13 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class RecipeRecyclerAdapter  extends RecyclerView.Adapter<RecipeRecyclerAdapter.ViewHolder>{
     private LayoutInflater layoutInflater;
     private List<RecipeDetails> recipes;
-    Context context;
+    private Context context;
 
     public RecipeRecyclerAdapter(Context context, LayoutInflater layoutInflater, List<RecipeDetails> recipes) {
         this.layoutInflater = layoutInflater;
@@ -48,10 +50,11 @@ public class RecipeRecyclerAdapter  extends RecyclerView.Adapter<RecipeRecyclerA
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @BindView(R.id.recipe_text_view)
         TextView recipeTextView;
         ViewHolder(View itemView) {
             super(itemView);
-            recipeTextView = itemView.findViewById(R.id.recipe_text_view);
+            ButterKnife.bind(this,itemView);
             recipeTextView.setOnClickListener(this);
         }
         @Override

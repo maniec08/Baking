@@ -37,11 +37,10 @@ public class RecipeMainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.recipe);
+        setContentView(R.layout.recipe_main);
         ButterKnife.bind(this);
         isTablet = getResources().getBoolean(R.bool.istablet);
         setSupportActionBar(toolbar);
-
         new ParseJson(this).execute();
     }
 
@@ -58,7 +57,6 @@ public class RecipeMainActivity extends AppCompatActivity {
 
     private class ParseJson extends AsyncTask<Void,Void, List<RecipeDetails>> {
         Context context;
-
         ParseJson(Context context) {
             this.context = context;
         }
@@ -66,7 +64,6 @@ public class RecipeMainActivity extends AppCompatActivity {
         @Override
         protected List<RecipeDetails> doInBackground(Void... voids) {
             Recipe recipe = new Recipe(context);
-
             return recipe.getList();
         }
         @Override

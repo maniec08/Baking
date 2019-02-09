@@ -44,7 +44,7 @@ public class ExtractJson {
             }catch (Exception e){
                 continue;
             }
-            recipeDetails.setId(getIntFromJson(recipeJson, KeyConstants.id));
+            recipeDetails.setId(parseIntFromJson(recipeJson, KeyConstants.id));
             recipeDetails.setName(getStringFromJson(recipeJson, KeyConstants.name));
             recipeDetails.setServings(getStringFromJson(recipeJson, KeyConstants.servings));
             recipeDetails.setImageUrl(getStringFromJson(recipeJson, KeyConstants.image));
@@ -96,7 +96,7 @@ public class ExtractJson {
             }
             ingredientDetails.setIngredient(getStringFromJson(ingredientJson, KeyConstants.ingredient));
             ingredientDetails.setMeasure(getStringFromJson(ingredientJson, KeyConstants.measure));
-            ingredientDetails.setQuantity(getIntFromJson(ingredientJson, KeyConstants.quantity));
+            ingredientDetails.setQuantity(parseIntFromJson(ingredientJson, KeyConstants.quantity));
             ingredientDetailsList.add(ingredientDetails);
         }
         return ingredientDetailsList;
@@ -120,9 +120,9 @@ public class ExtractJson {
             } catch (Exception e) {
                 continue;
             }
-            stepDetails.setId(getIntFromJson(stepJson, KeyConstants.id));
-            stepDetails.setShortDescribtion(getStringFromJson(stepJson, KeyConstants.shortDescription));
-            stepDetails.setDescribtion(getStringFromJson(stepJson, KeyConstants.description));
+            stepDetails.setId(parseIntFromJson(stepJson, KeyConstants.id));
+            stepDetails.setShortDescription(getStringFromJson(stepJson, KeyConstants.shortDescription));
+            stepDetails.setDescription(getStringFromJson(stepJson, KeyConstants.description));
             stepDetails.setVideoUrl(getStringFromJson(stepJson, KeyConstants.videoURL));
             stepDetails.setThumbnailUrl(getStringFromJson(stepJson, KeyConstants.thumbnailURL));
             stepDetailsList.add(stepDetails);
@@ -130,20 +130,15 @@ public class ExtractJson {
         return stepDetailsList;
     }
 
-    private int getIntFromJson(JSONObject jsonObject, String key) {
+    private String parseIntFromJson(JSONObject jsonObject, String key) {
         int returnVal = 0;
         try {
             returnVal = jsonObject.optInt(key, returnVal);
+            return Integer.toString(returnVal);
         } catch (Exception e) {
-            //handle - data type of id as string
-            try {
-                String string = jsonObject.optString(key, Integer.toString(returnVal));
-                returnVal = Integer.parseInt(string);
-            } catch (Exception e1) {
-                Log.d(TAG, e.getMessage());
-            }
+            Log.d(TAG, e.getMessage());
         }
-        return returnVal;
+        return "";
     }
 
     private String getStringFromJson(JSONObject jsonObject, String key) {
