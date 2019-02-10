@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.mani.baking.R;
-import com.mani.baking.datastruct.Recipe;
+import com.mani.baking.utils.SessionData;
 
 import androidx.annotation.Nullable;
 
@@ -39,14 +39,14 @@ public class WidgetService extends IntentService {
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_ON_WIDGET_NEXT.equals(action)) {
-               if( ++WidgetProvider.id >= Recipe.recipeDetailsList.size()){
+               if( ++WidgetProvider.id >= SessionData.recipeDetailsList.size()){
                    WidgetProvider.id =0;
                }
 
                 handleAction();
             } else if (ACTION_ON_WIDGET_PREVIOUS.equals(action)) {
                 if ( --WidgetProvider.id < 0) {
-                    WidgetProvider.id = Recipe.recipeDetailsList.size()-1;
+                    WidgetProvider.id = SessionData.recipeDetailsList.size()-1;
                 }
                 handleAction();
             }

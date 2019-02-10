@@ -24,7 +24,7 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.material.appbar.AppBarLayout;
 import com.mani.baking.R;
-import com.mani.baking.datastruct.Recipe;
+import com.mani.baking.utils.SessionData;
 import com.mani.baking.datastruct.StepDetails;
 import com.mani.baking.utils.KeyConstants;
 import com.mani.baking.utils.SelectionSesionVar;
@@ -163,7 +163,7 @@ public class ItemDetailFragment extends Fragment {
     }
 
     private StepDetails getCurrentStep() {
-        return Recipe.getStepDetails();
+        return SessionData.getStepDetails();
     }
 
     private String getVideoUrl() {
@@ -216,7 +216,7 @@ public class ItemDetailFragment extends Fragment {
         if (SelectionSesionVar.step == 0) {
             previousButton.setEnabled(false);
         }
-        if (SelectionSesionVar.step == Recipe.getRecipeDetails().getStepDetailsList().size() - 1) {
+        if (SelectionSesionVar.step == SessionData.getRecipeDetails().getStepDetailsList().size() - 1) {
             nextButton.setEnabled(false);
         }
         if (twoPane) {
@@ -233,7 +233,7 @@ public class ItemDetailFragment extends Fragment {
         } else {
             appBarLayout.setVisibility(View.VISIBLE);
             toolbar.setVisibility(View.VISIBLE);
-            toolbar.setTitle(Recipe.getRecipeDetails().getName());
+            toolbar.setTitle(SessionData.getRecipeDetails().getName());
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
             toolbar.setNavigationOnClickListener(v -> {
                 try {
@@ -250,7 +250,7 @@ public class ItemDetailFragment extends Fragment {
     }
 
     private void setUpButtonClickListener() {
-        int maxStep = Recipe.getRecipeDetails().getStepDetailsList().size() - 1;
+        int maxStep = SessionData.getRecipeDetails().getStepDetailsList().size() - 1;
         nextButton.setOnClickListener(v -> {
             SelectionSesionVar.step++;
             previousButton.setEnabled(true);

@@ -1,14 +1,12 @@
 package com.mani.baking.widget;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.mani.baking.R;
 import com.mani.baking.datastruct.IngredientDetails;
-import com.mani.baking.datastruct.Recipe;
+import com.mani.baking.utils.SessionData;
 
 import java.util.List;
 
@@ -19,7 +17,7 @@ public class WidgetRemoteViewFactory implements RemoteViewsService.RemoteViewsFa
 
     public WidgetRemoteViewFactory(Context applicationContext) {
         mContext = applicationContext;
-        ingredientDetails = Recipe.getRecipeDetails(WidgetProvider.id).getIngredientDetailsList();
+        ingredientDetails = SessionData.getRecipeDetails(WidgetProvider.id).getIngredientDetailsList();
     }
 
     @Override
@@ -29,7 +27,7 @@ public class WidgetRemoteViewFactory implements RemoteViewsService.RemoteViewsFa
 
     @Override
     public void onDataSetChanged() {
-     ingredientDetails = Recipe.getRecipeDetails(WidgetProvider.id).getIngredientDetailsList();
+     ingredientDetails = SessionData.getRecipeDetails(WidgetProvider.id).getIngredientDetailsList();
     }
 
     @Override

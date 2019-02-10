@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.mani.baking.R;
 import com.mani.baking.datastruct.IngredientDetails;
-import com.mani.baking.datastruct.Recipe;
 import com.mani.baking.datastruct.RecipeDetails;
 import com.mani.baking.datastruct.StepDetails;
 
@@ -29,7 +28,7 @@ public class ExtractJson {
     }
 
     public void initializeSessionVar() {
-        Recipe.recipeDetailsList = getRecipeDetails(context);
+        SessionData.recipeDetailsList = getRecipeDetails(context);
     }
 
     /**

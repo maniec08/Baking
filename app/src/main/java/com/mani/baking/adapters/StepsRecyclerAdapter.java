@@ -10,7 +10,7 @@ import com.mani.baking.R;
 import com.mani.baking.activity.ItemDetailActivity;
 import com.mani.baking.activity.ItemDetailFragment;
 import com.mani.baking.activity.ItemListActivity;
-import com.mani.baking.datastruct.Recipe;
+import com.mani.baking.utils.SessionData;
 import com.mani.baking.utils.SelectionSesionVar;
 
 import androidx.annotation.NonNull;
@@ -54,12 +54,12 @@ public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.textView.setText(
-                Recipe.getStepDetails(position).getShortDescription());
+                SessionData.getStepDetails(position).getShortDescription());
     }
 
     @Override
     public int getItemCount() {
-        return Recipe.getRecipeDetails().getStepDetailsList().size();
+        return SessionData.getRecipeDetails().getStepDetailsList().size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

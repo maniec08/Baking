@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.mani.baking.R;
 import com.mani.baking.adapters.StepsRecyclerAdapter;
-import com.mani.baking.datastruct.Recipe;
+import com.mani.baking.utils.SessionData;
 import com.mani.baking.utils.SelectionSesionVar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -54,14 +54,8 @@ public class ItemListActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-
     private void setUpToolBar() {
-        toolbar.setTitle(Recipe.getRecipeDetails().getName());
+        toolbar.setTitle(SessionData.getRecipeDetails().getName());
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         toolbar.setNavigationOnClickListener(v -> {
             try {
@@ -83,17 +77,6 @@ public class ItemListActivity extends AppCompatActivity {
                 context.startActivity(intent);
             }
         });
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-       // outState.putLong();
-        super.onSaveInstanceState(outState);
     }
 
     private void  startStepTransaction(Bundle savedInstance){

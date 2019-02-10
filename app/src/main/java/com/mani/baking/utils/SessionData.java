@@ -1,10 +1,11 @@
-package com.mani.baking.datastruct;
+package com.mani.baking.utils;
 
-import com.mani.baking.utils.SelectionSesionVar;
+import com.mani.baking.datastruct.RecipeDetails;
+import com.mani.baking.datastruct.StepDetails;
 
 import java.util.List;
 
-public class Recipe {
+public class SessionData {
     public static List<RecipeDetails> recipeDetailsList;
 
     public static RecipeDetails getRecipeDetails(int position) {

@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.widget.RemoteViews;
 
 import com.mani.baking.R;
-import com.mani.baking.datastruct.Recipe;
+import com.mani.baking.utils.SessionData;
 import com.mani.baking.utils.ExtractJson;
 
 
@@ -33,7 +33,7 @@ public class WidgetProvider extends AppWidgetProvider {
         PendingIntent previousPendingIntent = PendingIntent.getService(context, intentId++, previousIntent , 0);
         views.setOnClickPendingIntent(R.id.previous_step_button, previousPendingIntent);
 
-        views.setTextViewText(R.id.widget_tv, Recipe.getRecipeDetails(id).getName());
+        views.setTextViewText(R.id.widget_tv, SessionData.getRecipeDetails(id).getName());
         Intent intent = new Intent(context, IngredientListViewService.class);
         views.setRemoteAdapter(R.id.widget_lv, intent);
 
