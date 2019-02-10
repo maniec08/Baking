@@ -15,12 +15,14 @@ import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.google.android.material.appbar.AppBarLayout;
 import com.mani.baking.R;
 import com.mani.baking.datastruct.Recipe;
@@ -28,6 +30,7 @@ import com.mani.baking.datastruct.StepDetails;
 import com.mani.baking.utils.KeyConstants;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
@@ -35,6 +38,10 @@ import butterknife.ButterKnife;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static com.mani.baking.utils.KeyConstants.AUTOPLAY;
+import static com.mani.baking.utils.KeyConstants.PLAYER_POSITION;
+import static com.mani.baking.utils.KeyConstants.STEP_POSITION;
+import static com.mani.baking.utils.KeyConstants.WINDOW_POSITION;
 
 
 /**
@@ -45,14 +52,17 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
  */
 public class ItemDetailFragment extends Fragment {
 
+    public ItemDetailFragment() {
+    }
+
     private static final String TAG = ItemDetailFragment.class.getSimpleName();
     private boolean twoPane = false;
     private ExoPlayer exoPlayer;
-    private static Long playerPosition = 1L;
+    private Long playerPosition = 1L;
+    private int currentWindow;
+    private boolean autoPlay = false;
     public static int currentSelection = -1;
     private static int instanceSavedForStep = -1;
-    public ItemDetailFragment() {
-    }
 
     @BindView(R.id.video_view)
     PlayerView playerView;
@@ -74,8 +84,11 @@ public class ItemDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState!=null){
-            playerPosition = savedInstanceState.getLong(KeyConstants.PLAYER_POSITION,1L);
+        if (savedInstanceState != null) {
+            playerPosition = savedInstanceState.getLong(PLAYER_POSITION, 1L);
+            currentWindow = savedInstanceState.getInt(WINDOW_POSITION, 0);
+            autoPlay = savedInstanceState.getBoolean(AUTOPLAY, false);
+            instanceSavedForStep = savedInstanceState.getInt(STEP_POSITION, 0);
         }
     }
 
@@ -85,10 +98,93 @@ public class ItemDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.activity_item_detail, container, false);
         ButterKnife.bind(this, rootView);
         twoPane = getResources().getBoolean(R.bool.istablet);
+        setUpButtonClickListener();
         return rootView;
     }
 
-    private void setUpUi() {
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle savedInstance) {
+        super.onSaveInstanceState(savedInstance);
+        instanceSavedForStep = Recipe.selectedStep;
+        savedInstance.putInt(STEP_POSITION, instanceSavedForStep);
+        if (exoPlayer == null) {
+            savedInstance.putLong(PLAYER_POSITION, playerPosition);
+            savedInstance.putInt(KeyConstants.WINDOW_POSITION, currentWindow);
+            savedInstance.putBoolean(AUTOPLAY, autoPlay);
+        }
+
+/*        if (exoPlayer != null) {
+
+            savedInstance.putLong(KeyConstants.PLAYER_POSITION, exoPlayer.getCurrentPosition());
+        }*/
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23) {
+            setUpPlayer();
+        }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        hideSystemUi();
+        setUpUi(false);
+        if ((Util.SDK_INT <= 23 || exoPlayer == null)) {
+            setUpPlayer();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        releasePlayer();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
+    }
+
+    private void releasePlayer() {
+        if (exoPlayer != null) {
+            playerPosition = exoPlayer.getCurrentPosition();
+            currentWindow = exoPlayer.getCurrentWindowIndex();
+            exoPlayer.release();
+            exoPlayer = null;
+        }
+    }
+
+    private StepDetails getCurrentStep() {
+        return Recipe.getStepDetails();
+    }
+
+    private String getVideoUrl() {
+        String url = getCurrentStep().getVideoUrl();
+        if (isNullOrEmpty(url) && !isNullOrEmpty(getCurrentStep().getThumbnailUrl())) {
+            return getCurrentStep().getThumbnailUrl();
+        }
+        return url;
+    }
+
+    private void hideSystemUi() {
+        playerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
+
+    private void setUpUi(boolean isSetUpPlayer) {
         if (isNullOrEmpty(getCurrentStep().getDescription())) {
             getCurrentStep().setDescription("");
         }
@@ -97,10 +193,11 @@ public class ItemDetailFragment extends Fragment {
         }
 
         int orientation = getResources().getConfiguration().orientation;
-        setUpPlayer();
         setUpToolBar();
         setUpButton();
-
+        if (isSetUpPlayer) {
+            setUpPlayer();
+        }
         description.setText(getCurrentStep().getDescription());
         shortDescription.setText(getCurrentStep().getShortDescription());
 
@@ -117,13 +214,13 @@ public class ItemDetailFragment extends Fragment {
     }
 
     private void setUpButton() {
-        if(Recipe.selectedStep == 0){
+        if (Recipe.selectedStep == 0) {
             previousButton.setEnabled(false);
         }
-        if(Recipe.selectedStep == Recipe.getRecipeDetails().getStepDetailsList().size()-1){
+        if (Recipe.selectedStep == Recipe.getRecipeDetails().getStepDetailsList().size() - 1) {
             nextButton.setEnabled(false);
         }
-        if(twoPane){
+        if (twoPane) {
             nextButton.setVisibility(View.GONE);
             previousButton.setVisibility(View.GONE);
         }
@@ -164,8 +261,8 @@ public class ItemDetailFragment extends Fragment {
             if (Recipe.selectedStep == maxStep) {
                 nextButton.setEnabled(false);
             }
-            playerPosition =1L;
-            setUpUi();
+            playerPosition = 1L;
+            setUpUi(true);
         });
 
         previousButton.setOnClickListener(v -> {
@@ -177,70 +274,11 @@ public class ItemDetailFragment extends Fragment {
             if (Recipe.selectedStep == 0) {
                 previousButton.setEnabled(false);
             }
-            playerPosition =1L;
-            setUpUi();
+            playerPosition = 1L;
+            setUpUi(true);
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        setUpUi();
-        if(!twoPane) {
-            setUpButtonClickListener();
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle savedInstance) {
-        if(exoPlayer!=null){
-            instanceSavedForStep = Recipe.selectedStep;
-            savedInstance.putLong(KeyConstants.PLAYER_POSITION, exoPlayer.getCurrentPosition());
-        }
-        super.onSaveInstanceState(savedInstance);
-    }
-
-    @Override
-    public void onPause() {
-        if (exoPlayer != null && currentSelection == instanceSavedForStep) {
-            playerPosition = exoPlayer.getCurrentPosition();
-        } else {
-            playerPosition = 1L;
-        }
-        super.onPause();
-    }
-
-    private void destroyPlayer() {
-        if (exoPlayer != null) {
-            if (currentSelection == instanceSavedForStep) {
-                playerPosition = exoPlayer.getCurrentPosition();
-            } else {
-                playerPosition = 1L;
-            }
-            exoPlayer.stop();
-            exoPlayer.release();
-            exoPlayer = null;
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        destroyPlayer();
-        super.onDestroy();
-
-    }
-
-    private StepDetails getCurrentStep() {
-        return Recipe.getStepDetails();
-    }
-
-    private String getVideoUrl() {
-        String url = getCurrentStep().getVideoUrl();
-        if (isNullOrEmpty(url) && !isNullOrEmpty(getCurrentStep().getThumbnailUrl())) {
-            return getCurrentStep().getThumbnailUrl();
-        }
-        return url;
-    }
 
     private void setUpPlayer() {
         String url = getVideoUrl();
@@ -255,15 +293,14 @@ public class ItemDetailFragment extends Fragment {
                 exoPlayer = ExoPlayerFactory.newSimpleInstance(new DefaultRenderersFactory(getContext()), trackSelector, loadControl);
                 playerView.setPlayer(exoPlayer);
                 exoPlayer.setPlayWhenReady(true);
-            } else {
-                playerPosition =1L ;
             }
-            exoPlayer.seekTo(playerPosition);
+            exoPlayer.seekTo(currentWindow, playerPosition);
             MediaSource videoSource = new ExtractorMediaSource
                     .Factory(new DefaultHttpDataSourceFactory("load_uri")).setMinLoadableRetryCount(3)
                     .createMediaSource(mediaUri);
             exoPlayer.prepare(videoSource, false, false);
         }
     }
+
 }
 

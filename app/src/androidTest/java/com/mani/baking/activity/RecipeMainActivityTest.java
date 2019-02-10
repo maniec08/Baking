@@ -1,6 +1,8 @@
 package com.mani.baking.activity;
 
 
+import android.content.res.Configuration;
+
 import com.mani.baking.R;
 import com.mani.baking.datastruct.IngredientDetails;
 import com.mani.baking.datastruct.Recipe;
@@ -21,8 +23,10 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
+import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -34,18 +38,15 @@ import static com.mani.baking.activity.utils.Assertion.getStepsHeaderAssertion;
 import static com.mani.baking.activity.utils.Assertion.hasText;
 import static com.mani.baking.activity.utils.Assertion.isDisabled;
 import static com.mani.baking.activity.utils.Assertion.isViewEnabled;
-import static com.mani.baking.activity.utils.Objects.getExoPlayer;
 import static com.mani.baking.activity.utils.Objects.getIngredientRecyclerView;
 import static com.mani.baking.activity.utils.Objects.getIngredientsHeader;
 import static com.mani.baking.activity.utils.Objects.getNextButton;
 import static com.mani.baking.activity.utils.Objects.getPrevButton;
 import static com.mani.baking.activity.utils.Objects.getRecipeObject;
+import static com.mani.baking.activity.utils.Objects.getRecipeRecyclerView;
 import static com.mani.baking.activity.utils.Objects.getStepDescription;
 import static com.mani.baking.activity.utils.Objects.getStepsHeader;
 import static com.mani.baking.activity.utils.Objects.getStepsRecyclerView;
-import static junit.framework.TestCase.fail;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 @LargeTest
@@ -68,6 +69,7 @@ public class RecipeMainActivityTest {
     @Test
     public void mainActivityTest() {
         for (int i = 0; i < recipeDetailsList.size(); i++) {
+            getRecipeRecyclerView().perform(RecyclerViewActions.actionOnItemAtPosition(i,scrollTo()));
             getRecipeObject(i).check(hasText(recipeDetailsList.get(i).getName()));
         }
     }
@@ -78,6 +80,7 @@ public class RecipeMainActivityTest {
     @Test
     public void recipeStepDetailsTest() {
         for (int i = 0; i < recipeDetailsList.size(); i++) {
+            getRecipeRecyclerView().perform(RecyclerViewActions.actionOnItemAtPosition(i, scrollTo()));
             getRecipeObject(i).perform(click());
             getStepsHeader().check(getStepsHeaderAssertion());
             List<StepDetails> stepDetailsList = recipeDetailsList.get(i).getStepDetailsList();
@@ -102,6 +105,7 @@ public class RecipeMainActivityTest {
     public void recipeIngredientsListTest() {
         boolean twoPane = InstrumentationRegistry.getInstrumentation().getTargetContext().getResources().getBoolean(R.bool.istablet);
         int i = 0;
+        getRecipeRecyclerView().perform(RecyclerViewActions.actionOnItemAtPosition(i, scrollTo()));
         getRecipeObject(i).perform(click());
         getIngredientsHeader().check(getIngredientHeaderAssertion());
         getIngredientsHeader().perform(click());
@@ -142,8 +146,11 @@ public class RecipeMainActivityTest {
     @Test
     public void stepNavigationTest() {
         boolean twoPane = InstrumentationRegistry.getInstrumentation().getTargetContext().getResources().getBoolean(R.bool.istablet);
+        Configuration configuration = InstrumentationRegistry.getInstrumentation().getContext().getResources().getConfiguration();
+        boolean isLandscape = configuration.orientation == ORIENTATION_LANDSCAPE;
         int i = 0;
-        getRecipeObject(i).perform(click());
+
+        getRecipeRecyclerView().perform(RecyclerViewActions.actionOnItemAtPosition(i, click()));
         getStepsRecyclerView().check(matches(isDisplayed()))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
         if (!twoPane) {
@@ -151,49 +158,77 @@ public class RecipeMainActivityTest {
             getPrevButton().check(isDisabled());
         }
         List<StepDetails> stepDetailsList = Recipe.getRecipeDetails(i).getStepDetailsList();
-        for (int j = 0; j < stepDetailsList.size(); j++) {
-            if (twoPane) {
-                getStepsRecyclerView().check(matches(isDisplayed()))
-                        .perform(RecyclerViewActions.actionOnItemAtPosition(j, click()));
-                getPrevButton().check(matches(not(isDisplayed())));
-                getNextButton().check(matches(not(isDisplayed())));
-            } else {
-                getPrevButton().check(matches(isDisplayed()));
-                getNextButton().check(matches(isDisplayed()));
-                if (j == 0) {
-                    getPrevButton().check(isDisabled());
-                    getNextButton().check(isViewEnabled());
-                }
-                if (j == stepDetailsList.size()) {
-                    getPrevButton().check(isViewEnabled());
-                    getNextButton().check(isDisabled());
-                }
 
-            }
-            getStepDescription().check(matches(withText(stepDetailsList.get(j).getDescription())));
-            String url = getVideoUrl(stepDetailsList.get(j));
-            if (url.isEmpty()) {
-                getExoPlayer().check(matches(not(isDisplayed())));
+        for (int j = 0; j < stepDetailsList.size(); j++) {
+
+            if (!isLandscape && !twoPane) {
+                verifyPhonePortraitNavigation(stepDetailsList, j);
+            } else if (isLandscape && !twoPane) {
+                verifyPhoneLandscapeNavigation(stepDetailsList, j);
             } else {
-                getExoPlayer().check(matches(isDisplayed()));
-            }
-            if (!twoPane) {
-                getNextButton().perform(click());
+                verifyTabletNavigation(stepDetailsList, j);
             }
 
         }
 
     }
 
-    private boolean isNullOrEmpty(String str) {
-        return str == null || str.isEmpty();
+    private void verifyTabletNavigation(List<StepDetails> stepDetailsList, int j) {
+        getStepsRecyclerView().check(matches(isDisplayed()))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(j, click()));
+        getPrevButton().check(matches(not(isDisplayed())));
+        getNextButton().check(matches(not(isDisplayed())));
+        getStepDescription().check(matches(withText(stepDetailsList.get(j).getDescription())));
+    }
+
+    private void verifyPhonePortraitNavigation(List<StepDetails> stepDetails, int j) {
+        Espresso.pressBack();
+        getStepsRecyclerView().check(matches(isDisplayed()))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(j, click()));
+        getPrevButton().check(matches(isDisplayed()));
+        getNextButton().check(matches(isDisplayed()));
+        if (j == 0) {
+            getPrevButton().check(isDisabled());
+            getNextButton().check(isViewEnabled());
+        }
+        if (j == stepDetails.size()) {
+            getPrevButton().check(isViewEnabled());
+            getNextButton().check(isDisabled());
+        }
+        getStepDescription().check(matches(withText(stepDetails.get(j).getDescription())));
+    }
+
+    private void verifyPhoneLandscapeNavigation(List<StepDetails> stepDetails, int j) {
+        Espresso.pressBack();
+        getStepsRecyclerView().check(matches(isDisplayed()))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(j, click()));
+        if (getVideoUrl(stepDetails.get(j)).isEmpty()) {
+            getStepDescription().check(matches(withText(stepDetails.get(j).getDescription())));
+            getPrevButton().check(matches(isDisplayed()));
+            getNextButton().check(matches(isDisplayed()));
+            if (j == 0) {
+                getPrevButton().check(isDisabled());
+                getNextButton().check(isViewEnabled());
+            }
+            if (j == stepDetails.size()) {
+                getPrevButton().check(isViewEnabled());
+                getNextButton().check(isDisabled());
+            }
+        } else {
+            getPrevButton().check(matches(not(isDisplayed())));
+            getNextButton().check(matches(not(isDisplayed())));
+        }
+    }
+
+    private boolean isNotNullOrEmpty(String str) {
+        return str != null && !str.isEmpty();
     }
 
     private String getVideoUrl(StepDetails stepDetails) {
-        if (!isNullOrEmpty(stepDetails.getVideoUrl())) {
+        if (isNotNullOrEmpty(stepDetails.getVideoUrl())) {
             return stepDetails.getVideoUrl();
         }
-        if (!isNullOrEmpty(stepDetails.getThumbnailUrl())) {
+        if (isNotNullOrEmpty(stepDetails.getThumbnailUrl())) {
             return stepDetails.getThumbnailUrl();
         }
         return "";

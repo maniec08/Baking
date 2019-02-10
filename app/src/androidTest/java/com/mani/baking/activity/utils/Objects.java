@@ -16,42 +16,44 @@ import static org.hamcrest.core.AllOf.allOf;
 
 public class Objects {
 
-    public static ViewInteraction getRecipeObject(int position){
+    public static ViewInteraction getRecipeObject(int position) {
         return onView(allOf(isDescendantOfA(withId(R.id.recipe_recycler_view)),
-                withIndex(withId(R.id.recipe_text_view),position)));
+                withIndex(withId(R.id.recipe_text_view), position)));
     }
 
-    public static ViewInteraction getStepsObject(int position){
-        return onView(allOf(isDescendantOfA(withId(R.id.steps_recycler_view)),
-                withIndex(withId(R.id.steps_content_tv),position)));
-    }
-
-    public static ViewInteraction getIngredientsHeader(){
+    public static ViewInteraction getIngredientsHeader() {
         return onView(Matchers.allOf(hasSibling(withId(R.id.steps_recycler_view)), withText(R.string.ingredients_header)));
     }
-    public static ViewInteraction getStepsHeader(){
+
+    public static ViewInteraction getStepsHeader() {
         return onView(Matchers.allOf(hasSibling(withId(R.id.steps_recycler_view)), withText(R.string.steps_header)));
     }
 
-    public static ViewInteraction getStepsRecyclerView(){
+    public static ViewInteraction getRecipeRecyclerView() {
+        return onView(withId(R.id.recipe_recycler_view));
+    }
+
+    public static ViewInteraction getStepsRecyclerView() {
         return onView(withId(R.id.steps_recycler_view));
     }
 
-    public static ViewInteraction getIngredientRecyclerView(){
+    public static ViewInteraction getIngredientRecyclerView() {
         return onView(withId(R.id.ingredient_recycler_view));
     }
 
-    public static ViewInteraction getPrevButton(){
+    public static ViewInteraction getPrevButton() {
         return onView(withId(R.id.previous_step_button));
     }
-    public static ViewInteraction getNextButton(){
+
+    public static ViewInteraction getNextButton() {
         return onView(withId(R.id.next_step_button));
     }
 
-    public static ViewInteraction getStepDescription(){
+    public static ViewInteraction getStepDescription() {
         return onView(withId(R.id.steps_description_tv));
     }
-    public static ViewInteraction getExoPlayer(){
+
+    public static ViewInteraction getExoPlayer() {
         return onView(withId(R.id.video_view));
     }
 }

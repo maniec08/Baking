@@ -51,7 +51,7 @@ public class ItemListActivity extends AppCompatActivity {
         setupRecyclerView();
         if(twoPane) {
             if (Recipe.selectedStep >= 0) {
-                startStepTransaction();
+                startStepTransaction(savedInstanceState);
             } else {
                 startIngredientTransaction();
             }
@@ -89,9 +89,19 @@ public class ItemListActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
 
-    private void startStepTransaction(){
-        if (twoPane) {
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+       // outState.putLong();
+        super.onSaveInstanceState(outState);
+    }
+
+    private void  startStepTransaction(Bundle savedInstance){
+        if (twoPane && savedInstance == null)  {
             fragment = new ItemDetailFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.item_detail_container, fragment)
