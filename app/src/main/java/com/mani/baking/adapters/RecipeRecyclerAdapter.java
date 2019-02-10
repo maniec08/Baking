@@ -8,11 +8,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mani.baking.R;
-import com.mani.baking.activity.ItemDetailActivity;
 import com.mani.baking.activity.ItemListActivity;
-import com.mani.baking.datastruct.Recipe;
 import com.mani.baking.datastruct.RecipeDetails;
-import com.mani.baking.utils.KeyConstants;
+import com.mani.baking.utils.SelectionSesionVar;
 
 import java.util.List;
 
@@ -64,8 +62,8 @@ public class RecipeRecyclerAdapter  extends RecyclerView.Adapter<RecipeRecyclerA
     }
 
     private void launchIntent(int adapterPosition) {
-        Recipe.selectedRecipe = adapterPosition;
-        Recipe.selectedStep = -1;
+        SelectionSesionVar.recipe = adapterPosition;
+        SelectionSesionVar.step = -1;
         Intent intent = new Intent(context, ItemListActivity.class);
         context.startActivity(intent);
     }

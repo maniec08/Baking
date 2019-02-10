@@ -11,6 +11,7 @@ import com.mani.baking.activity.ItemDetailActivity;
 import com.mani.baking.activity.ItemDetailFragment;
 import com.mani.baking.activity.ItemListActivity;
 import com.mani.baking.datastruct.Recipe;
+import com.mani.baking.utils.SelectionSesionVar;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,7 +24,7 @@ public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdap
     private final boolean twoPane;
 
     private void startFragment(int position) {
-        Recipe.selectedStep =position;
+        SelectionSesionVar.step =position;
         if (twoPane) {
             ItemDetailFragment fragment = new ItemDetailFragment();
             //Updating the selection is used to update player seek position

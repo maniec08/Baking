@@ -8,6 +8,7 @@ import com.mani.baking.datastruct.IngredientDetails;
 import com.mani.baking.datastruct.Recipe;
 import com.mani.baking.datastruct.RecipeDetails;
 import com.mani.baking.datastruct.StepDetails;
+import com.mani.baking.utils.ExtractJson;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -59,8 +60,9 @@ public class RecipeMainActivityTest {
 
     @Before
     public void setUpSessionVar() {
-        Recipe recipe = new Recipe(InstrumentationRegistry.getInstrumentation().getTargetContext());
-        recipeDetailsList = recipe.getList();
+        ExtractJson extractJson = new ExtractJson(InstrumentationRegistry.getInstrumentation().getTargetContext());
+        extractJson.initializeSessionVar();
+        recipeDetailsList = Recipe.recipeDetailsList;
     }
 
     /**

@@ -15,7 +15,6 @@ import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
@@ -28,9 +27,9 @@ import com.mani.baking.R;
 import com.mani.baking.datastruct.Recipe;
 import com.mani.baking.datastruct.StepDetails;
 import com.mani.baking.utils.KeyConstants;
+import com.mani.baking.utils.SelectionSesionVar;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
@@ -106,7 +105,7 @@ public class ItemDetailFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
-        instanceSavedForStep = Recipe.selectedStep;
+        instanceSavedForStep = SelectionSesionVar.step;
         savedInstance.putInt(STEP_POSITION, instanceSavedForStep);
         if (exoPlayer == null) {
             savedInstance.putLong(PLAYER_POSITION, playerPosition);
@@ -214,10 +213,10 @@ public class ItemDetailFragment extends Fragment {
     }
 
     private void setUpButton() {
-        if (Recipe.selectedStep == 0) {
+        if (SelectionSesionVar.step == 0) {
             previousButton.setEnabled(false);
         }
-        if (Recipe.selectedStep == Recipe.getRecipeDetails().getStepDetailsList().size() - 1) {
+        if (SelectionSesionVar.step == Recipe.getRecipeDetails().getStepDetailsList().size() - 1) {
             nextButton.setEnabled(false);
         }
         if (twoPane) {
@@ -253,12 +252,12 @@ public class ItemDetailFragment extends Fragment {
     private void setUpButtonClickListener() {
         int maxStep = Recipe.getRecipeDetails().getStepDetailsList().size() - 1;
         nextButton.setOnClickListener(v -> {
-            Recipe.selectedStep++;
+            SelectionSesionVar.step++;
             previousButton.setEnabled(true);
-            if (Recipe.selectedStep > maxStep) {
-                Recipe.selectedStep = maxStep;
+            if (SelectionSesionVar.step > maxStep) {
+                SelectionSesionVar.step = maxStep;
             }
-            if (Recipe.selectedStep == maxStep) {
+            if (SelectionSesionVar.step == maxStep) {
                 nextButton.setEnabled(false);
             }
             playerPosition = 1L;
@@ -266,12 +265,12 @@ public class ItemDetailFragment extends Fragment {
         });
 
         previousButton.setOnClickListener(v -> {
-            Recipe.selectedStep--;
+            SelectionSesionVar.step--;
             nextButton.setEnabled(true);
-            if (Recipe.selectedStep < 0) {
-                Recipe.selectedStep = 0;
+            if (SelectionSesionVar.step < 0) {
+                SelectionSesionVar.step = 0;
             }
-            if (Recipe.selectedStep == 0) {
+            if (SelectionSesionVar.step == 0) {
                 previousButton.setEnabled(false);
             }
             playerPosition = 1L;

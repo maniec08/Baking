@@ -10,6 +10,7 @@ import android.widget.RemoteViews;
 
 import com.mani.baking.R;
 import com.mani.baking.datastruct.Recipe;
+import com.mani.baking.utils.ExtractJson;
 
 
 public class WidgetProvider extends AppWidgetProvider {
@@ -19,7 +20,9 @@ public class WidgetProvider extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-        new Recipe(context).getList();
+        ExtractJson extractJson = new ExtractJson(context);
+        extractJson.initializeSessionVar();
+
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 
         Intent nextIntent = WidgetService.getActionNextRecipeIntent(context);
