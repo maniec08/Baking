@@ -4,17 +4,13 @@ package com.mani.baking.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.mani.baking.R;
-import com.mani.baking.adapters.RecipeRecyclerAdapter;
 import com.mani.baking.adapters.StepsRecyclerAdapter;
-import com.mani.baking.datastruct.Recipe;
-import com.mani.baking.datastruct.RecipeDetails;
-import com.mani.baking.utils.KeyConstants;
+import com.mani.baking.utils.SessionData;
+import com.mani.baking.utils.SelectionSesionVar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -50,7 +46,7 @@ public class ItemListActivity extends AppCompatActivity {
         addClickListener();
         setupRecyclerView();
         if(twoPane) {
-            if (Recipe.selectedStep >= 0) {
+            if (SelectionSesionVar.step >= 0) {
                 startStepTransaction(savedInstanceState);
             } else {
                 startIngredientTransaction();
@@ -58,14 +54,8 @@ public class ItemListActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-
     private void setUpToolBar() {
-        toolbar.setTitle(Recipe.getRecipeDetails().getName());
+        toolbar.setTitle(SessionData.getRecipeDetails().getName());
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         toolbar.setNavigationOnClickListener(v -> {
             try {
@@ -80,24 +70,13 @@ public class ItemListActivity extends AppCompatActivity {
         final Context context = this;
         ingredientTextView.setOnClickListener(v -> {
             if (twoPane) {
-                Recipe.selectedStep = -1;
+                SelectionSesionVar.step = -1;
                 startIngredientTransaction();
             } else {
                 Intent intent = new Intent(context, IngredientActivity.class);
                 context.startActivity(intent);
             }
         });
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-       // outState.putLong();
-        super.onSaveInstanceState(outState);
     }
 
     private void  startStepTransaction(Bundle savedInstance){

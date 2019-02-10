@@ -21,15 +21,24 @@ import java.util.List;
 
 public class ExtractJson {
     private static final String TAG = ExtractJson.class.getSimpleName();
+    private Context context;
 
+    public ExtractJson(Context context) {
+        this.context = context;
+    }
+
+    public void initializeSessionVar() {
+        SessionData.recipeDetailsList = getRecipeDetails(context);
+    }
 
     /**
      * Parse the R.raw.baking converts the json to List<RecipeDetails>
      * On any error empty string or 0 or empty list is set as applicable
+     *
      * @param context context
      * @return List<RecipeDetails>
      */
-    public List<RecipeDetails> getRecipeDetails(Context context) {
+    private List<RecipeDetails> getRecipeDetails(Context context) {
         JSONArray recipeDetailsJson = readJsonFromRaw(context);
         List<RecipeDetails> recipeDetailsList = new ArrayList<>();
         if (recipeDetailsJson.length() == 0) {
@@ -40,8 +49,8 @@ public class ExtractJson {
             RecipeDetails recipeDetails = new RecipeDetails();
             JSONObject recipeJson;
             try {
-                 recipeJson = recipeDetailsJson.getJSONObject(i);
-            }catch (Exception e){
+                recipeJson = recipeDetailsJson.getJSONObject(i);
+            } catch (Exception e) {
                 continue;
             }
             recipeDetails.setId(parseIntFromJson(recipeJson, KeyConstants.id));

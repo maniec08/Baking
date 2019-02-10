@@ -1,8 +1,6 @@
 package com.mani.baking.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +8,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mani.baking.R;
-import com.mani.baking.activity.IngredientFragment;
-import com.mani.baking.activity.ItemListActivity;
 import com.mani.baking.datastruct.IngredientDetails;
-import com.mani.baking.datastruct.Recipe;
-import com.mani.baking.utils.KeyConstants;
+import com.mani.baking.utils.SessionData;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -29,7 +23,7 @@ public class IngredientsRecyclerAdapter extends RecyclerView.Adapter<Ingredients
     private final List<IngredientDetails> ingredientDetails;
     private final Context context;
     public IngredientsRecyclerAdapter( Context context) {
-        ingredientDetails = Recipe.getRecipeDetails().getIngredientDetailsList();
+        ingredientDetails = SessionData.getRecipeDetails().getIngredientDetailsList();
         this.context = context;
     }
 

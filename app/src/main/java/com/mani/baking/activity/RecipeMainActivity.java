@@ -9,8 +9,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.mani.baking.R;
 import com.mani.baking.adapters.RecipeRecyclerAdapter;
-import com.mani.baking.datastruct.Recipe;
+import com.mani.baking.utils.SessionData;
 import com.mani.baking.datastruct.RecipeDetails;
+import com.mani.baking.utils.ExtractJson;
 
 import java.util.List;
 
@@ -63,8 +64,9 @@ public class RecipeMainActivity extends AppCompatActivity {
 
         @Override
         protected List<RecipeDetails> doInBackground(Void... voids) {
-            Recipe recipe = new Recipe(context);
-            return recipe.getList();
+            ExtractJson extractJson = new ExtractJson(context);
+            extractJson.initializeSessionVar();
+            return SessionData.recipeDetailsList;
         }
         @Override
         protected void onPostExecute(List<RecipeDetails> recipes){
