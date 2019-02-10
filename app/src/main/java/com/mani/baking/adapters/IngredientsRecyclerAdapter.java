@@ -22,7 +22,8 @@ public class IngredientsRecyclerAdapter extends RecyclerView.Adapter<Ingredients
 
     private final List<IngredientDetails> ingredientDetails;
     private final Context context;
-    public IngredientsRecyclerAdapter( Context context) {
+
+    public IngredientsRecyclerAdapter(Context context) {
         ingredientDetails = SessionData.getRecipeDetails().getIngredientDetailsList();
         this.context = context;
     }
@@ -40,26 +41,31 @@ public class IngredientsRecyclerAdapter extends RecyclerView.Adapter<Ingredients
         holder.quantityTextView.setText(ingredientDetails.get(position).getQuantity());
         holder.measureTextView.setText(ingredientDetails.get(position).getMeasure());
         holder.ingredientTextView.setText(ingredientDetails.get(position).getIngredient());
-        if(position%2 ==0){
+        if (position % 2 == 0) {
             holder.linearLayout.setBackground(context.getDrawable(R.color.ingredients_row_background));
         }
     }
 
     @Override
     public int getItemCount() {
-        return ingredientDetails.size();
+        if (ingredientDetails != null)
+            return ingredientDetails.size();
+        return 0;
     }
 
-     class ViewHolder extends RecyclerView.ViewHolder  {
+    class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.quantity_tv)
         TextView quantityTextView;
-         @BindView(R.id.measure_tv) TextView measureTextView;
-         @BindView(R.id.ingredient_tv)TextView ingredientTextView;
-         @BindView(R.id.ingredient_row)LinearLayout linearLayout;
+        @BindView(R.id.measure_tv)
+        TextView measureTextView;
+        @BindView(R.id.ingredient_tv)
+        TextView ingredientTextView;
+        @BindView(R.id.ingredient_row)
+        LinearLayout linearLayout;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 
