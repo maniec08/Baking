@@ -19,14 +19,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RecipeRecyclerAdapter  extends RecyclerView.Adapter<RecipeRecyclerAdapter.ViewHolder>{
+public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecipeRecyclerAdapter.ViewHolder> {
     private LayoutInflater layoutInflater;
     private List<RecipeDetails> recipes;
     private Context context;
 
     public RecipeRecyclerAdapter(Context context, LayoutInflater layoutInflater, List<RecipeDetails> recipes) {
         this.layoutInflater = layoutInflater;
-        this.recipes=recipes;
+        this.recipes = recipes;
         this.context = context;
     }
 
@@ -44,20 +44,24 @@ public class RecipeRecyclerAdapter  extends RecyclerView.Adapter<RecipeRecyclerA
 
     @Override
     public int getItemCount() {
-        return recipes.size();
+        if (recipes != null)
+            return recipes.size();
+        return 0;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.recipe_text_view)
         TextView recipeTextView;
+
         ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
             recipeTextView.setOnClickListener(this);
         }
+
         @Override
         public void onClick(View view) {
-                launchIntent(getAdapterPosition());
+            launchIntent(getAdapterPosition());
         }
     }
 

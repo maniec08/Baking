@@ -1,6 +1,7 @@
 package com.mani.baking.adapters;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import butterknife.ButterKnife;
 
 public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdapter.ViewHolder> {
 
+    private final String TAG = StepsRecyclerAdapter.class.getSimpleName();
     private final ItemListActivity parentActivity;
     private final boolean twoPane;
 
@@ -59,7 +61,12 @@ public class StepsRecyclerAdapter extends RecyclerView.Adapter<StepsRecyclerAdap
 
     @Override
     public int getItemCount() {
-        return SessionData.getRecipeDetails().getStepDetailsList().size();
+        try {
+            return SessionData.getRecipeDetails().getStepDetailsList().size();
+        }catch (Exception e){
+            Log.d(TAG, e.getMessage());
+        }
+        return 0;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
